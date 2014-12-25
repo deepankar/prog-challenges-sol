@@ -25,11 +25,11 @@ typedef unsigned long long int luint;
 #define FOR0(i, n) for(int i = 0; i < n; i++)
 #if 1
 #define INS \
-      { \
-         static int calls; \
-         calls++; \
-         cout << __FUNCTION__ << ":" << calls << endl; \
-      }
+{ \
+   static int calls; \
+   calls++; \
+   cout << __FUNCTION__ << ":" << calls << endl; \
+}
 #else
 #define INS 
 #endif
@@ -39,16 +39,16 @@ void pv(const vector<T> &v){
       cout <<"{}\n";
       return;
    }
-	cout << "{";
-	FOR0(i,v.size()-1){
-		cout << v[i] <<", ";
-	}
-	cout << v[v.size()-1] << "}\n";
+   cout << "{";
+   FOR0(i,v.size()-1){
+      cout << v[i] <<", ";
+   }
+   cout << v[v.size()-1] << "}\n";
 }
 
 class Solver
 {
-	public:
+   public:
    void solve()
    {
    }
@@ -56,11 +56,11 @@ class Solver
 
 int main(int argc, char **argv)
 {
-	Solver slv;
-	int m,n;
-	while(cin.good()){
-//      string line;
-//      getline(cin, line);
+   Solver slv;
+   int m,n;
+   while(cin.good()){
+      //      string line;
+      //      getline(cin, line);
 
       cin >> m >> n;
       if(!cin.good()){
@@ -68,6 +68,6 @@ int main(int argc, char **argv)
       }
       //cout << line << endl;
       //slv.solve();
-	}
-	return 0;
+   }
+   return 0;
 }
