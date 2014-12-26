@@ -7,6 +7,8 @@
 #include <math.h>
 #include <assert.h>
 #include <vector>
+#include <stack>
+#include <queue>
 #include <map>
 #include <algorithm>
 #include <string>
@@ -59,8 +61,8 @@ int main(int argc, char **argv)
    Solver slv;
    int m,n;
    while(cin.good()){
-      //      string line;
-      //      getline(cin, line);
+      //string line;
+      //getline(cin, line);
 
       cin >> m >> n;
       if(!cin.good()){
