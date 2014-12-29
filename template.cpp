@@ -62,18 +62,18 @@ int main(int argc, char **argv)
    int tt;
    cin >> tt;
    FOR0(t,tt){
-   }
-   int m,n;
-   while(cin.good()){
-      //string line;
-      //getline(cin, line);
-
-      cin >> m >> n;
-      if(!cin.good()){
-         return 0;
+      //if(t) cout << endl;
+      /*
+      string line;
+      getline(cin, line);
+      while(getline(cin, line), line.size() && cin.good()){
       }
-      //cout << line << endl;
-      //slv.solve();
+      */
+      /*
+      int m,n;
+      cin >> m >> n;
+      */
+      slv.solve();
    }
    return 0;
 }
