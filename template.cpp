@@ -25,6 +25,14 @@ typedef long long int lint;
 typedef unsigned long long int luint;
 
 #define FOR0(i, n) for(int i = 0; i < n; i++)
+
+#if 0
+#define C cout
+#else
+#include <fstream>
+ofstream C("/dev/null");
+#endif
+
 #if 1
 #define INS \
 { \
