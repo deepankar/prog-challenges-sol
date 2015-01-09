@@ -109,7 +109,7 @@ class Solver
    void solve(lint n, lint c1, lint n1, lint c2, lint n2)
    {
       lint x=-1,y=-1;
-      if(c2 > c1){
+      if(((double)c2)/n2 >((double)c1)/n1){
          y = minsolve(n2, n, n1);
          if(y != -1){
             x = (n-y*n2)/n1;
