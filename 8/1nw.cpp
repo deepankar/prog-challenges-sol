@@ -27,7 +27,7 @@ typedef unsigned long long int luint;
 
 #define FOR0(i, n) for(int i = 0; i < n; i++)
 
-#if 0
+#if 1
 #define C cout
 #else
 #include <fstream>
@@ -58,50 +58,16 @@ void pv(const vector<T> &v){
 }
 
 static const int BLANK = 10;
-class State
-{
-   char h[15];//max
-   public:
-   State() /*: nbsh(0)*/
-   {
-      memset(h, BLANK, sizeof(h));
-   }
-   void set(int i, char val){
-      h[i] = val;
-   }
-/*   int GetNumBish(int k) const
-   {
-      int nbsh = 0;
-      FOR0(i,k){
-         nbsh += (h[i] != BLANK);
-      }
-      return nbsh;
-   }*/
-   bool find(int k, int v) const
-   {
-      FOR0(i, k){
-         if(h[i] == v) return true;
-      }
-      return false;
-   }
-   void print(int k){
-      FOR0(i, k){
-         C << (int)h[i] << ' ';
-      }
-      C << endl;
-   }
-};
-
 class Solver
 {
    int nb,n;
    int nsol;
 
-   bool IsSolution(const State &st, int k, int bused){
+   bool IsSolution(int k, int bused){
       return bused == nb;
    }
 
-   void findNextMoves(const State &st, int k, char *nxt, int &nnxt, int bused)
+   void findNextMoves(int k, char *nxt, int &nnxt, int bused, int hused)
    {
       nnxt = 0;
       if(bused + 2*n-k-1 > nb){
@@ -110,27 +76,27 @@ class Solver
 
       int kk = min(k, 2*n-2-k);
       for(int i = -kk; i <=kk; i+=2){
-         if(!st.find(k, i)){
+         if(!(hused & (1 << (8+i)))){
             nxt[nnxt++] = i;
          }
       }
    }
 
-   void backtrace(State &st, int k, int bused)
+   void backtrace(int k, int bused, int hused)
    {
       char nxt[9];
       int nnxt;
-      findNextMoves(st, k, nxt, nnxt, bused);
-//      C << "k=" << k << " nnxt=" << nnxt << endl;
+      findNextMoves(k, nxt, nnxt, bused, hused);
+//      C << "k=" << k << " nnxt=" << nnxt << " hused=" << std::hex << hused << std::dec << endl;
       FOR0(i,nnxt){
-         st.set(k, nxt[i]);
          int newbused = nxt[i] != BLANK;
-         if(IsSolution(st,k+1, bused+newbused)){
-//            C << "Sol ";
-//            st.print(k+1);
+         int hnew = (nxt[i] == BLANK)? 0 : (1<<(8+nxt[i]));
+         if(IsSolution(k+1, bused+newbused)){
+         //   C << "Sol ";
+         //   st.print(k+1);
             nsol++;
          }else{
-            backtrace(st, k+1, bused+newbused);
+            backtrace(k+1, bused+newbused, hused|hnew);
          }
       }
    }
@@ -144,8 +110,7 @@ class Solver
          return 0;
       }
       if(nb == 0) return 1;
-      State st;
-      backtrace(st, 0, 0);
+      backtrace(0, 0, 0);
       return nsol;
    }
 };
