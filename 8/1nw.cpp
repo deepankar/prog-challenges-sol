@@ -60,7 +60,6 @@ void pv(const vector<T> &v){
 static const int BLANK = 10;
 class State
 {
-//   int nbsh;
    char h[15];//max
    public:
    State() /*: nbsh(0)*/
@@ -68,19 +67,16 @@ class State
       memset(h, BLANK, sizeof(h));
    }
    void set(int i, char val){
-      int old = h[i];
       h[i] = val;
-//      if(old==BLANK && val != BLANK) nbsh++;
-//      if(old!=BLANK && val == BLANK) nbsh--;
    }
-   int GetNumBish(int k) const
+/*   int GetNumBish(int k) const
    {
       int nbsh = 0;
       FOR0(i,k){
          nbsh += (h[i] != BLANK);
       }
       return nbsh;
-   }
+   }*/
    bool find(int k, int v) const
    {
       FOR0(i, k){
@@ -101,14 +97,14 @@ class Solver
    int nb,n;
    int nsol;
 
-   bool IsSolution(const State &st, int k){
-      return st.GetNumBish(k) == nb;
+   bool IsSolution(const State &st, int k, int bused){
+      return bused == nb;
    }
 
-   void findNextMoves(const State &st, int k, char *nxt, int &nnxt)
+   void findNextMoves(const State &st, int k, char *nxt, int &nnxt, int bused)
    {
       nnxt = 0;
-      if(st.GetNumBish(k) + 2*n-k-1 > nb){
+      if(bused + 2*n-k-1 > nb){
          nxt[nnxt++] = BLANK;
       }
 
@@ -120,20 +116,21 @@ class Solver
       }
    }
 
-   void backtrace(State &st, int k)
+   void backtrace(State &st, int k, int bused)
    {
       char nxt[9];
       int nnxt;
-      findNextMoves(st, k, nxt, nnxt);
+      findNextMoves(st, k, nxt, nnxt, bused);
 //      C << "k=" << k << " nnxt=" << nnxt << endl;
       FOR0(i,nnxt){
          st.set(k, nxt[i]);
-         if(IsSolution(st,k+1)){
+         int newbused = nxt[i] != BLANK;
+         if(IsSolution(st,k+1, bused+newbused)){
 //            C << "Sol ";
 //            st.print(k+1);
             nsol++;
          }else{
-            backtrace(st, k+1);
+            backtrace(st, k+1, bused+newbused);
          }
       }
    }
@@ -148,7 +145,7 @@ class Solver
       }
       if(nb == 0) return 1;
       State st;
-      backtrace(st, 0);
+      backtrace(st, 0, 0);
       return nsol;
    }
 };
