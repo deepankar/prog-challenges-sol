@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#define NDEBUG 1
 #include <assert.h>
 #include <vector>
 #include <stack>
@@ -26,7 +27,7 @@ typedef unsigned long long int luint;
 
 #define FOR0(i, n) for(int i = 0; i < n; i++)
 
-#if 1
+#if 0
 #define C cout
 #else
 #include <fstream>
@@ -75,8 +76,6 @@ class State
    int GetNumBish(int k) const
    {
       int nbsh = 0;
-      if(!k) return 0;
-      assert(k > 0);
       FOR0(i,k){
          nbsh += (h[i] != BLANK);
       }
@@ -84,14 +83,12 @@ class State
    }
    bool find(int k, int v) const
    {
-      if(!k) return false;
       FOR0(i, k){
          if(h[i] == v) return true;
       }
       return false;
    }
    void print(int k){
-      if(!k) return;
       FOR0(i, k){
          C << (int)h[i] << ' ';
       }
@@ -116,9 +113,7 @@ class Solver
       }
 
       int kk = min(k, 2*n-2-k);
-      int mx = (kk&1)? (1+kk/2) : (kk/2);
-      for(int i = -mx; i <=mx; i++){
-         if(i == 0 && (kk&1)) continue; //odd excludes 0
+      for(int i = -kk; i <=kk; i+=2){
          if(!st.find(k, i)){
             nxt[nnxt++] = i;
          }
@@ -127,21 +122,15 @@ class Solver
 
    void backtrace(State &st, int k)
    {
-      if(IsSolution(st,k)){
-//         C << "Sol ";
-//         st.print(k);
-//         nsol++;
-         return;
-      }
       char nxt[9];
       int nnxt;
       findNextMoves(st, k, nxt, nnxt);
- //     C << "k=" << k << " nnxt=" << nnxt << endl;
+//      C << "k=" << k << " nnxt=" << nnxt << endl;
       FOR0(i,nnxt){
          st.set(k, nxt[i]);
          if(IsSolution(st,k+1)){
-            C << "Sol ";
-            st.print(k+1);
+//            C << "Sol ";
+//            st.print(k+1);
             nsol++;
          }else{
             backtrace(st, k+1);
@@ -157,6 +146,7 @@ class Solver
       if(nb > 2*n -1){
          return 0;
       }
+      if(nb == 0) return 1;
       State st;
       backtrace(st, 0);
       return nsol;
