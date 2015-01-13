@@ -61,7 +61,6 @@ static const int BLANK = 10;
 class Solver
 {
    int nb,n;
-   int nsol;
 
    bool IsSolution(int k, int bused){
       return bused == nb;
@@ -70,6 +69,9 @@ class Solver
    void findNextMoves(int k, char *nxt, int &nnxt, int bused, int hused)
    {
       nnxt = 0;
+      /*if(bused + 2*n-k-1 < nb){
+         return;
+      }*/
       if(bused + 2*n-k-1 > nb){
          nxt[nnxt++] = BLANK;
       }
@@ -82,13 +84,20 @@ class Solver
       }
    }
 
-   void backtrace(int k, int bused, int hused)
+   luint backtrace(int k, int bused, int hused)
    {
       char nxt[9];
       int nnxt;
+      luint nsol = 0;
       findNextMoves(k, nxt, nnxt, bused, hused);
 //      C << "k=" << k << " nnxt=" << nnxt << " hused=" << std::hex << hused << std::dec << endl;
       FOR0(i,nnxt){
+         int lsh = 0;
+//         C << "   nxt[i] = " << (int)nxt[i] << endl;
+         if(hused==0 && nxt[i] > 0 && nxt[i] < BLANK) continue;
+         if(hused==0 && nxt[i] < 0){
+            lsh = 1; //exploit symmetry
+         }
          int newbused = nxt[i] != BLANK;
          int hnew = (nxt[i] == BLANK)? 0 : (1<<(8+nxt[i]));
          if(IsSolution(k+1, bused+newbused)){
@@ -96,22 +105,24 @@ class Solver
          //   st.print(k+1);
             nsol++;
          }else{
-            backtrace(k+1, bused+newbused, hused|hnew);
+            luint v = backtrace(k+1, bused+newbused, hused|hnew);
+//            if(lsh)
+//               C << "* nxt="<<(int)nxt[i] << " val=" << v << endl;
+            nsol += (v<<lsh);
          }
       }
+      return nsol;
    }
    public:
    int solve(int n, int nb)
    {
       this->nb = nb;
       this->n = n;
-      nsol=0;
       if(nb > 2*n -1){
          return 0;
       }
       if(nb == 0) return 1;
-      backtrace(0, 0, 0);
-      return nsol;
+      return backtrace(0, 0, 0);
    }
 };
 
