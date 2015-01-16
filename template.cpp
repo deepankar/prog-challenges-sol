@@ -26,7 +26,7 @@ typedef unsigned long long int luint;
 
 #define FOR0(i, n) for(int i = 0; i < n; i++)
 
-#if 0
+#if 1
 #define C cout
 #else
 #include <fstream>
@@ -66,10 +66,10 @@ class Solver
 
 int main(int argc, char **argv)
 {
-   Solver slv;
    int tt;
    cin >> tt;
    FOR0(t,tt){
+      Solver slv;
       //if(t) cout << endl;
       /*
       string line;
