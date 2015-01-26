@@ -23,6 +23,7 @@ typedef vector<bool> VB;
 typedef pair<int,int> PI;
 typedef long long int lint;
 typedef unsigned long long int luint;
+typedef vector<vector<int> > VVI;
 
 #define FOR0(i, n) for(int i = 0; i < n; i++)
 
