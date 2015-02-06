@@ -29,36 +29,6 @@ typedef vector<vector<lint> > VVLI;
 
 #define FOR0(i, n) for(int i = 0; i < n; i++)
 
-#if 1
-#define C cout
-#else
-#include <fstream>
-ofstream C("/dev/null");
-#endif
-
-#if 1
-#define INS \
-{ \
-   static int calls; \
-   calls++; \
-   cout << __FUNCTION__ << ":" << calls << endl; \
-}
-#else
-#define INS 
-#endif
-template<class T>
-void pv(const vector<T> &v){
-   if(!v.size()){
-      cout <<"{}\n";
-      return;
-   }
-   cout << "{";
-   FOR0(i,v.size()-1){
-      cout << v[i] <<", ";
-   }
-   cout << v[v.size()-1] << "}\n";
-}
-
 class Solver
 {
    int64_t mod(int64_t x, int64_t n){
@@ -98,7 +68,7 @@ class Solver
       bool operator<(const Path &p2) const
       {
          assert(path.size() == p2.path.size());
-         for(int i = path.size()-1; i >= 0; i--){
+         for(int i =0; i< path.size(); i++){
             if(path[i] != p2.path[i]){
                return path[i] < p2.path[i];
             }
@@ -114,7 +84,7 @@ class Solver
       VLI sp1(nr);
       VLI sp2(nr);
       VLI *sp[] = {&sp1, &sp2};
-      VVI parent(nc, VI(nr));
+      VVI parent(nc, VI(nr)); //Not really needed after I added paths1, paths2. But it's 1:53 AM!
       vector<Path> paths1(nr, Path(nc));
       vector<Path> paths2(nr, Path(nc));
       vector<Path> *paths[] = {&paths1, &paths2};
